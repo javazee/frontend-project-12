@@ -2,6 +2,7 @@ import routes from './utils/routes.js';
 import LoginPage from './components/loginPage.jsx';
 import NotFoundPage from './components/notFoundPage.jsx';
 import MainPage from './components/mainPage.jsx';
+import { ProtectedRoute } from './components/protectedRoute.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
       <Routes>
         <Route path={routes.notFound} element={<NotFoundPage />} />
         <Route path={routes.login} element={<LoginPage />} />
-        <Route path={routes.main} element={<MainPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path={routes.main} element={<MainPage />} /> 
+        </Route>
       </Routes>
     </BrowserRouter>
   );
