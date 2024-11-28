@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const channelsApi = createApi({
   reducerPath: 'channels',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/v1/data',
+    baseUrl: '/api/v1/channels',
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
       if (token) {

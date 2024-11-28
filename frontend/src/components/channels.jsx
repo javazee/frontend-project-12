@@ -9,11 +9,11 @@ import cn from 'classnames';
 const Channel = (props) => {
 
   const { id, name } = props.data;
-  // const activeChannel = useSelector((state) => state.activeChannel);
+  const activeChannel = useSelector((state) => state.channel.activeChannel);
   const dispatch = useDispatch();
 
-  const handleClick = (channel) => {
-    dispatch(setActiveChannel(channel));
+  const handleClick = ({ id, name }) => {
+    dispatch(setActiveChannel({ id, name }));
   }
 
   const classNames = cn({
@@ -21,19 +21,20 @@ const Channel = (props) => {
     'rounded-0': true,
     'text-start': true,
     'btn': true,
-    'btn-secondary': props.isActive,
+    'btn-secondary': activeChannel?.id === id,
   })
 
   return (
-    <li key = {id} className='nav-item w-100'>
-      <button type='button' className={classNames} onCLick={handleClick(props.data)}>
-        <span className='me-1'>#</span>{name}</button>
+    <li key={id} className='nav-item w-100'>
+      <div role='group' className='d-flex dropdown dnt-group'>
+        <button type='button' className={classNames} onClick={() => handleClick({ id, name })}>
+          <span className='me-1'>#</span>{name}
+        </button>
+      </div>
     </li>)
 }
 
 const Channels = () => {
-  console.log('render channels column');
-
   const { data, error, isLoading, refetch, status } = useGetChannelsQuery();
   const navigate = useNavigate();
 
@@ -46,8 +47,6 @@ const Channels = () => {
       }
     }
   }, []);
-
-  console.log(data);
 
   if (isLoading) {
     return <div>Ожидание загрузки чата</div>;
@@ -66,7 +65,7 @@ const Channels = () => {
         </button>
       </div>
       <ul id='channels-box' className='nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block'>
-        {data.channels.map((channel) => <Channel data={channel} isActive={data.currentChannelId === channel.id}/>)}
+        {data.map((channel) => <Channel data={channel} />)}
       </ul>
     </div>
   )
